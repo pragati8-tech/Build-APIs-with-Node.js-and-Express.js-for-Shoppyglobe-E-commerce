@@ -65,6 +65,38 @@ app.get('/products', (req, res) => {
   }
 })
 
+// GET /products/:id - Fetch a single product by ID
+app.get('/products/:id', (req, res) => {
+  try {
+
+    const id = req.params.id;
+
+    // Find a product by ID from the products array
+    const product = products.find(p => p._id === id);
+
+    // If the product is not found
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: `Product not found with id ${id}`
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: product
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+});
+
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

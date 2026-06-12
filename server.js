@@ -96,7 +96,7 @@ app.get('/products/:id', (req, res) => {
   }
 });
 
-// POST /cart - Product ko cart mein add karo
+// POST /cart - Add the product to the cart
 
 const cart = []
 app.post('/cart', (req, res) => {
@@ -170,7 +170,57 @@ app.post('/cart', (req, res) => {
   }
 });
 
+// PUT /cart/:id - Update the quantity of the cart item
+app.put('/cart/:id', (req, res) => {
+  try {
 
+    const id = req.params.id;
+    const { quantity } = req.body;
+
+    //  If quantity is missing from the request body
+    if (!quantity) {
+      return res.status(400).json({
+        success: false,
+        message: 'Quantity is required'
+      });
+    }
+
+    // Quantity must be positive
+    if (quantity <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Quantity must be greater than 0'
+      });
+    }
+
+    // Find the item in the cart
+    const cartItem = cart.find(item => item.cartItemId === id);
+
+    // If the cart item is not found
+    if (!cartItem) {
+      return res.status(404).json({
+        success: false,
+        message: `Cart item not found with id ${id}`
+      });
+    }
+
+    // Update the quantity
+    cartItem.quantity = quantity;
+
+    res.status(200).json({
+      success: true,
+      message: 'Cart item quantity updated successfully',
+      data: cartItem
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+});
 
 const PORT = process.env.PORT || 5000;
 

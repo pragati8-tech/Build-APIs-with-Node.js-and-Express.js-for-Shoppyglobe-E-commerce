@@ -96,6 +96,81 @@ app.get('/products/:id', (req, res) => {
   }
 });
 
+// POST /cart - Product ko cart mein add karo
+
+const cart = []
+app.post('/cart', (req, res) => {
+  try {
+
+    const { productId, quantity } = req.body;
+
+    // If productId or quantity is missing from the request body
+    if (!productId || !quantity) {
+      return res.status(400).json({
+        success: false,
+        message: 'Both productId and quantity are required'
+      });
+    }
+
+    // Quantity must be positive
+    if (quantity <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Quantity must be greater than 0'
+      });
+    }
+
+    // Check if the product exists
+    const product = products.find(p => p._id === productId);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: `Product not found with id ${productId}`
+      });
+    }
+
+    // Check if the product is already in the cart
+    const cartItem = cart.find(item => item.productId === productId);
+
+    if (cartItem) {
+      // If the product is already in the cart, update the quantity
+      cartItem.quantity += quantity;
+
+      return res.status(200).json({
+        success: true,
+        message: 'The quantity has been updated in the cart',
+        data: cartItem
+      });
+    }
+
+    // Add a new item to the cart
+    const newCartItem = {
+      cartItemId: String(cart.length + 1),
+      productId,
+      name: product.name,
+      price: product.price,
+      quantity
+    };
+
+    cart.push(newCartItem);
+
+    res.status(201).json({
+      success: true,
+      message: 'The product has been added to the cart',
+      data: newCartItem
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+});
+
+
 
 const PORT = process.env.PORT || 5000;
 

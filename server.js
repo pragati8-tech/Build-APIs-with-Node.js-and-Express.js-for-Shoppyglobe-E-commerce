@@ -222,6 +222,41 @@ app.put('/cart/:id', (req, res) => {
   }
 });
 
+// DELETE /cart/:id - Remove the item from the cart
+app.delete('/cart/:id', (req, res) => {
+  try {
+
+    const id = req.params.id;
+
+    // Find the item in the cart
+    const cartItemIndex = cart.findIndex(item => item.cartItemId === id);
+
+    // If the cart item is not found
+    if (cartItemIndex === -1) {
+      return res.status(404).json({
+        success: false,
+        message: `Cart item not found with id ${id}`
+      });
+    }
+
+    //Remove the item from the cart
+    const deletedItem = cart.splice(cartItemIndex, 1);
+
+    res.status(200).json({
+      success: true,
+      message: 'The item has been removed from the cart',
+      data: deletedItem[0]
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

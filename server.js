@@ -2,6 +2,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db')
+const Product = require('./models/Product')
 
 dotenv.config();
 connectDB()
@@ -11,29 +12,29 @@ const app = express();
 app.use(express.json());
 
 // Temporary products data
-const products = [
-  {
-    _id: '1',
-    name: 'Wireless Headphones',
-    price: 1999,
-    description: 'High quality wireless headphones',
-    stock: 50
-  },
-  {
-    _id: '2',
-    name: 'Bluetooth Speaker',
-    price: 2999,
-    description: 'Portable bluetooth speaker',
-    stock: 30
-  },
-  {
-    _id: '3',
-    name: 'Smart Watch',
-    price: 4999,
-    description: 'Feature rich smart watch',
-    stock: 20
-  }
-];
+// const products = [
+//   {
+//     _id: '1',
+//     name: 'Wireless Headphones',
+//     price: 1999,
+//     description: 'High quality wireless headphones',
+//     stock: 50
+//   },
+//   {
+//     _id: '2',
+//     name: 'Bluetooth Speaker',
+//     price: 2999,
+//     description: 'Portable bluetooth speaker',
+//     stock: 30
+//   },
+//   {
+//     _id: '3',
+//     name: 'Smart Watch',
+//     price: 4999,
+//     description: 'Feature rich smart watch',
+//     stock: 20
+//   }
+// ];
 
 // Test route
 app.get('/', (req, res) => {

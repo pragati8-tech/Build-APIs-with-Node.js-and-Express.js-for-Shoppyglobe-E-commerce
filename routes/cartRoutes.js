@@ -3,14 +3,15 @@ const express = require('express');
 const router = express.Router();
 
 const {addToCart,updateCart,removeFromCart} = require('../controllers/cartController');
+const {  validateObjectId,validateCart,validateCartUpdate } = require('../middleware/validate')
 
-// POST /cart - Add the product to the cart
-router.post('/', addToCart);
+// POST /cart - Add the product to the cart -  validate the input
+router.post('/',validateCart, addToCart);
 
-// PUT /cart/:id -  Update the quantity of the cart item
-router.put('/:id', updateCart);
+// PUT /cart/:id -  Update the cart item quantity — validate the ID and input
+router.put('/:id', validateObjectId,validateCartUpdate,updateCart);
 
-// DELETE /cart/:id - Remove the item from the cart
-router.delete('/:id', removeFromCart);
+// DELETE /cart/:id - Remove an item from the cart — validate the ID
+router.delete('/:id', validateObjectId,removeFromCart);
 
 module.exports = router;

@@ -5,6 +5,7 @@ const connectDB = require('./config/db')
 const Product = require('./models/Product')
 const productRoutes = require('./routes/productRoutes')
 const cartRoutes = require('./routes/cartRoutes')
+const errorHandler = require('./middleware/errorHandler')
 dotenv.config();
 connectDB()
 const app = express();
@@ -17,6 +18,17 @@ app.use('/products', productRoutes)
 
 // Cart Routes
 app.use('/cart', cartRoutes)
+
+// 404 route — no route matched
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.originalUrl}`
+  });
+});
+
+//Global error handler
+app.use(errorHandler)
 
 // Temporary products data
 // const products = [

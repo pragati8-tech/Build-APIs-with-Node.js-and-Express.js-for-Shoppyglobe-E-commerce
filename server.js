@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db')
 const Product = require('./models/Product')
 const productRoutes = require('./routes/productRoutes')
+const cartRoutes = require('./routes/cartRoutes')
 dotenv.config();
 connectDB()
 const app = express();
@@ -13,6 +14,9 @@ app.use(express.json());
 
 // Product Routes
 app.use('/products', productRoutes)
+
+// Cart Routes
+app.use('/cart', cartRoutes)
 
 // Temporary products data
 // const products = [

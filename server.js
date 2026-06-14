@@ -2,16 +2,25 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db')
-const Product = require('./models/Product')
+// const Product = require('./models/Product')
 const productRoutes = require('./routes/productRoutes')
 const cartRoutes = require('./routes/cartRoutes')
 const errorHandler = require('./middleware/errorHandler')
+const authRoutes = require('./routes/authRoutes')
 dotenv.config();
 connectDB()
 const app = express();
 
 // Middleware - JSON for body parse
 app.use(express.json());
+
+// Test route
+app.get('/', (req, res) => {
+  res.json({ message: 'ShoppyGlobe API is running!' });
+});
+
+// Auth Routes
+app.use('/', authRoutes)
 
 // Product Routes
 app.use('/products', productRoutes)
@@ -54,11 +63,6 @@ app.use(errorHandler)
 //     stock: 20
 //   }
 // ];
-
-// Test route
-app.get('/', (req, res) => {
-  res.json({ message: 'ShoppyGlobe API is running!' });
-});
 
 // GET /products - // Fetch all products
 // app.get('/products', (req, res) => {

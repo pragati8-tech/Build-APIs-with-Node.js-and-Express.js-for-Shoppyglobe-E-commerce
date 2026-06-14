@@ -12,7 +12,7 @@ const generateToken = (userId) => {
 };
 
 // POST /register - Register a new user
-const registerUser = async (req, res) => {
+const registerUser = async (req, res,next) => {
   try {
 
     const { name, email, password } = req.body;
@@ -69,7 +69,7 @@ const registerUser = async (req, res) => {
     });
 
   } catch (error) {
-
+    console.log('REGISTER ERROR:', error)
     // Duplicate email error
     if (error.code === 11000) {
       return res.status(400).json({
